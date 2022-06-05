@@ -87,15 +87,38 @@ scl = Pin(17)
 sda = Pin(16)
 snsr = adxl345(scl, sda)
 
+LED = Pin(13, Pin.OUT)
+LED.off()
+
+valores = 10
+sumax = 0.0
+sumay = 0.0
+sumaz = 0.0 
+#i = 0
+#promediox = 0.0
+#promedioy = 0.0
+#promedioz = 0.0
+#promedioxa = 0.0
+#promedioya = 0.0
+#promedioza = 0.0
+
+for i in range(10):
+        x,y,z = snsr.readXYZ()
+         
+        sumax += x
+        sumay += y
+        sumaz += z
+        time.sleep(0.1)
+
+promedioxa = sumax / valores
+promedioya = sumay /valores
+promedioza = sumaz / valores
+
 while True:
-    valores = 10
     sumax = 0.0
     sumay = 0.0
-    sumaz = 0.0 
-    i = 0
+    sumaz = 0.0
     
-    LED = Pin(13, Pin.OUT)
-    LED.off()
     for i in range(10):
         x,y,z = snsr.readXYZ()
          
@@ -107,15 +130,22 @@ while True:
     promediox = sumax / valores
     promedioy = sumay /valores
     promedioz = sumaz / valores
-    
-    promedioxa = x
-    promedioya = i-1
-    promedioza = i-1
-    
-    if (promediox - promedioxa) or (promedioy - promedioya) or (promedioz - promedioza) == 0:
+    diferencia = promedioz - promedioza
+    #if (promediox - promedioxa) >=100 or (promedioy - promedioya) >=100 or (promedioz - promedioza) >= 100:
+    if diferencia >= 100:
         LED.on()
     
+    promedioxa = promediox
+    promedioya = promedioy
+    promedioza = promedioz
     
-    print('x:',promediox,'y:',promedioy,'z:',promedioz)
+    print("promedio actual")
+    #print('x:',promediox,'y:',promedioy,'z:',promedioz)
+    print('z:',promedioz)
+    print("promedio anterior")
+    #print('x:',promedioxa,'y:',promedioya,'z:',promedioza)
+    print('z:',promedioza)
     #print('x:',x,'y:',y,'z:',z,'uint:mg')
+    print(diferencia)
+
     
